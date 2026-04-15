@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Smart Resource Allocation</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="main-container">
+
+    <h1>🚀 Smart Resource Allocation</h1>
+    <p class="subtitle">Efficient system to manage and allocate resources</p>
+
+    <!-- Toggle -->
+    <div class="toggle-buttons">
+        <button onclick="showSection('add')" id="addBtn" class="active">➕ Add</button>
+        <button onclick="showSection('request')" id="requestBtn">📥 Request</button>
+    </div>
+
+    <!-- Slider -->
+    <div class="slider-wrapper">
+        <div class="slider">
+
+            <!-- ADD -->
+            <div class="slide">
+                <div class="card">
+                    <h2>Add Resource</h2>
+
+                    <input id="resourceName" placeholder="Resource Name (e.g. Laptops)">
+                    <input id="resourceQty" type="number" placeholder="Quantity">
+
+                    <button>Add Resource</button>
+                </div>
+            </div>
+
+            <!-- REQUEST -->
+            <div class="slide">
+                <div class="card">
+                    <h2>Request Resource</h2>
+
+                    <input id="requestName" placeholder="Resource Name">
+                    <input id="requestQty" type="number" placeholder="Quantity">
+
+                    <button>Request Resource</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div class="dashboard">
+        <h2>📊 Live Dashboard</h2>
+
+        <div class="stats">
+            <div class="stat"><h3 id="totalResources">0</h3><p>Total</p></div>
+            <div class="stat"><h3 id="totalRequests">0</h3><p>Requests</p></div>
+            <div class="stat"><h3 id="successRate">0%</h3><p>Success</p></div>
+        </div>
+
+        <div class="progress-bar">
+            <div id="progressFill"></div>
+        </div>
+    </div>
+
+    <!-- OUTPUT -->
+    <div class="output">
+        <h2>📋 Activity</h2>
+        <ul id="resultList"></ul>
+    </div>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
