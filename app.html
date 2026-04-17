@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Smart Resource Allocation</title>
+
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🚀 Smart Resource Allocation</h1>
+
+<div class="main-buttons">
+    <button onclick="openForm('add')">➕ Add</button>
+    <button onclick="openForm('request')">📥 Request</button>
+</div>
+
+<!-- FORM -->
+<div id="formBox" class="form-box hidden">
+
+    <h2 id="formTitle"></h2>
+
+    <input id="nameInput" placeholder="Resource Name">
+    <input id="qtyInput" type="number" placeholder="Quantity">
+
+    <p id="aiSuggestion"></p>
+
+    <button onclick="startVoice()">🎤 Speak</button>
+
+    <button id="submitBtn"></button>
+    <button class="close" onclick="closeForm()">Close</button>
+
+</div>
+
+<!-- REQUESTS -->
+<div class="card">
+    <h2>📩 Requests</h2>
+    <ul id="requestList"></ul>
+</div>
+
+<!-- DASHBOARD -->
+<div class="card">
+    <h2>📊 Dashboard</h2>
+    <p>Total Resources: <span id="totalResources">0</span></p>
+    <p>Total Requests: <span id="totalRequests">0</span></p>
+    <p>Success Rate: <span id="successRate">0%</span></p>
+</div>
+
+<!-- BEAUTIFUL CHARTS -->
+<div class="card charts">
+    <h2>📊 Analytics Dashboard</h2>
+    <canvas id="barChart"></canvas>
+    <canvas id="pieChart"></canvas>
+</div>
+
+<ul id="resultList"></ul>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
