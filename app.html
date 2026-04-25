@@ -1,67 +1,172 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Smart Resource Allocation</title>
-
-<link rel="stylesheet" href="style.css">
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Resource Allocation System - Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+<body class="app-body">
+  <div class="background-overlay"></div>
+  <div class="bg-scene" aria-hidden="true">
+    <div class="bg-mesh"></div>
+    <span class="orb orb-a"></span>
+    <span class="orb orb-b"></span>
+    <span class="orb orb-c"></span>
+    <span class="orb orb-d"></span>
+    <div class="cursor-glow" id="cursorGlow"></div>
+  </div>
+  <main class="app-wrapper">
+    <header class="glass-card header-card">
+      <div>
+        <h1>Smart Resource Allocation System</h1>
+        <p class="subtext">Manage resources, requests, and delivery flow in one place.</p>
+        <p id="sessionInfo" class="session-info"></p>
+      </div>
+      <button id="logoutBtn" class="btn-secondary" type="button">Logout</button>
+    </header>
 
-<body>
+    <section class="glass-card dashboard-card">
+      <h2>Dashboard</h2>
+      <div class="dashboard-split">
+        <div class="stats-grid">
+          <article class="stat-card">
+            <p>Total Available Resources</p>
+            <h3 id="statAvailable">0</h3>
+          </article>
+          <article class="stat-card">
+            <p>Total Requested (Pending)</p>
+            <h3 id="statRequested">0</h3>
+          </article>
+          <article class="stat-card">
+            <p>Total Scheduled</p>
+            <h3 id="statScheduled">0</h3>
+          </article>
+          <article class="stat-card">
+            <p>Total Delivered</p>
+            <h3 id="statDelivered">0</h3>
+          </article>
+          <article class="stat-card">
+            <p>Success Rate</p>
+            <h3 id="statSuccessRate">0%</h3>
+          </article>
+        </div>
+        <div class="chart-wrap">
+          <canvas id="resourceChart" aria-label="Resource overview chart"></canvas>
+          <div class="chart-legend">
+            <span><i class="dot dot-available"></i>Available</span>
+            <span><i class="dot dot-requested"></i>Requested (Pending)</span>
+            <span><i class="dot dot-scheduled"></i>Scheduled</span>
+            <span><i class="dot" style="background: #8E44AD; box-shadow: 0 0 10px #9B59B6;"></i>Delivered</span>
+          </div>
+        </div>
+      </div>
+    </section>
 
-<div class="container">
+    <section class="glass-card action-nav">
+      <h2>Actions</h2>
+      <div class="action-buttons">
+        <button class="btn-primary section-toggle active" data-target="addResourceSection" type="button">➕ Add Resource</button>
+        <button class="btn-primary section-toggle" data-target="requestResourceSection" type="button">📥 Request Resource</button>
+        <button class="btn-primary section-toggle" data-target="logisticsSection" type="button">🚚 Logistics Department</button>
+      </div>
+    </section>
 
-<h1>🚀 Smart Resource Allocation</h1>
+    <section id="addResourceSection" class="glass-card form-section">
+      <h2>Resource Provider - Add Resource</h2>
+      <form id="resourceForm" class="vertical-form">
+        <label for="resourceName">Resource Name</label>
+        <input id="resourceName" name="resourceName" type="text" required />
 
-<div class="main-buttons">
-    <button onclick="openForm('add')">➕ Add</button>
-    <button onclick="openForm('request')">📥 Request</button>
-</div>
+        <label for="resourceQty">Quantity</label>
+        <input id="resourceQty" name="resourceQty" type="number" min="1" required />
 
-<!-- FORM -->
-<div id="formBox" class="form-box hidden">
+        <label for="providerName">Provider Name</label>
+        <input id="providerName" name="providerName" type="text" required />
 
-    <h2 id="formTitle"></h2>
+        <label for="providerPhone">Phone Number</label>
+        <input id="providerPhone" name="providerPhone" type="tel" maxlength="10" placeholder="10-digit phone" required />
 
-    <input id="nameInput" placeholder="Resource Name">
-    <input id="qtyInput" type="number" placeholder="Quantity">
+        <label for="providerAddress">Address</label>
+        <div class="location-group">
+          <button type="button" class="btn-secondary btn-small" id="btnResourceLocation">📍 Get Current Location</button>
+        </div>
+        <div id="resourceMap" class="map-container hidden"></div>
+        <input type="hidden" id="providerLat" name="providerLat" />
+        <input type="hidden" id="providerLng" name="providerLng" />
+        <textarea id="providerAddress" name="providerAddress" rows="2" required></textarea>
 
-    <p id="aiSuggestion"></p>
+        <button type="submit" class="btn-primary">Save Resource</button>
+      </form>
+      <p id="resourceMessage" class="message"></p>
+    </section>
 
-    <button onclick="startVoice()">🎤 Speak</button>
+    <section id="requestResourceSection" class="glass-card form-section hidden">
+      <h2>Resource Requester - Request Resource</h2>
+      <form id="requestForm" class="vertical-form">
+        <label for="requestName">Resource Name</label>
+        <input id="requestName" name="requestName" type="text" required />
 
-    <button id="submitBtn"></button>
-    <button class="close" onclick="closeForm()">Close</button>
+        <label for="requestQty">Quantity</label>
+        <input id="requestQty" name="requestQty" type="number" min="1" required />
 
-</div>
+        <label for="requesterName">Requester Name</label>
+        <input id="requesterName" name="requesterName" type="text" required />
 
-<!-- REQUESTS -->
-<div class="card">
-    <h2>📩 Requests</h2>
-    <ul id="requestList"></ul>
-</div>
+        <label for="requesterPhone">Phone Number</label>
+        <input id="requesterPhone" name="requesterPhone" type="tel" maxlength="10" placeholder="10-digit phone" required />
 
-<!-- DASHBOARD -->
-<div class="card">
-    <h2>📊 Dashboard</h2>
-    <p>Total Resources: <span id="totalResources">0</span></p>
-    <p>Total Requests: <span id="totalRequests">0</span></p>
-    <p>Success Rate: <span id="successRate">0%</span></p>
-</div>
+        <label for="requesterAddress">Address</label>
+        <div class="location-group">
+          <button type="button" class="btn-secondary btn-small" id="btnRequestLocation">📍 Get Current Location</button>
+        </div>
+        <div id="requestMap" class="map-container hidden"></div>
+        <input type="hidden" id="requesterLat" name="requesterLat" />
+        <input type="hidden" id="requesterLng" name="requesterLng" />
+        <textarea id="requesterAddress" name="requesterAddress" rows="2" required></textarea>
 
-<!-- BEAUTIFUL CHARTS -->
-<div class="card charts">
-    <h2>📊 Analytics Dashboard</h2>
-    <canvas id="barChart"></canvas>
-    <canvas id="pieChart"></canvas>
-</div>
+        <label>Deliver to Home?</label>
+        <div class="radio-group">
+          <label><input type="radio" name="requestDelivery" value="yes" checked /> Yes</label>
+          <label><input type="radio" name="requestDelivery" value="no" /> No, I'll pick it up</label>
+        </div>
 
-<ul id="resultList"></ul>
+        <button type="submit" class="btn-primary">Submit Request</button>
+      </form>
+      <p id="requestMessage" class="message"></p>
+    </section>
 
-</div>
+    <section id="logisticsSection" class="glass-card form-section hidden">
+      <h2>Logistics Department</h2>
+      <form id="logisticsForm" class="vertical-form">
+        <label for="logisticsName">Logistics Person Name</label>
+        <input id="logisticsName" name="logisticsName" type="text" required />
 
-<script src="script.js"></script>
+        <label for="logisticsPhone">Phone Number</label>
+        <input id="logisticsPhone" name="logisticsPhone" type="tel" maxlength="10" placeholder="10-digit phone" required />
+
+        <button type="submit" class="btn-primary">Add Logistics Member</button>
+      </form>
+      <p id="logisticsMessage" class="message"></p>
+    </section>
+
+    <section class="glass-card list-section">
+      <h2>Requests</h2>
+      <div id="requestsList" class="cards-grid"></div>
+    </section>
+
+    <section class="glass-card list-section">
+      <h2>Matches</h2>
+      <div id="matchesList" class="cards-grid"></div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
 </body>
 </html>
