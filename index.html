@@ -1,23 +1,61 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Login</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Resource Allocation System - Login</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
 </head>
+<body class="auth-body">
+  <div class="background-overlay"></div>
+  <div class="bg-scene" aria-hidden="true">
+    <div class="bg-mesh"></div>
+    <span class="orb orb-a"></span>
+    <span class="orb orb-b"></span>
+    <span class="orb orb-c"></span>
+    <span class="orb orb-d"></span>
+    <div class="cursor-glow" id="cursorGlow"></div>
+  </div>
+  <main class="auth-container glass-card">
+    <h1>Smart Resource Allocation System</h1>
+    <p class="subtext">Sign in to manage resources, requests, and deliveries.</p>
 
-<body class="center">
+    <div class="tab-row">
+      <button id="showLoginBtn" class="tab-btn active" type="button">Login</button>
+      <button id="showSignupBtn" class="tab-btn" type="button">Signup</button>
+    </div>
 
-<div class="login-card small">
-    <h2>🔐 Smart Resource</h2>
+    <form id="loginForm" class="auth-form">
+      <h2>Login</h2>
+      <label for="loginEmail">Email</label>
+      <input id="loginEmail" name="loginEmail" type="email" placeholder="you@example.com" required />
 
-    <input id="user" placeholder="Username">
-    <input id="pass" type="password" placeholder="Password">
+      <label for="loginPassword">Password</label>
+      <input id="loginPassword" name="loginPassword" type="password" placeholder="Enter password" required />
 
-    <button onclick="login()">Login</button>
-    <button onclick="signup()">Signup</button>
-</div>
+      <button type="submit" class="btn-primary">Login</button>
+    </form>
 
-<script src="script.js"></script>
+    <form id="signupForm" class="auth-form hidden">
+      <h2>Signup</h2>
+      <label for="signupName">Full Name</label>
+      <input id="signupName" name="signupName" type="text" placeholder="Your name" required />
+
+      <label for="signupEmail">Email</label>
+      <input id="signupEmail" name="signupEmail" type="email" placeholder="you@example.com" required />
+
+      <label for="signupPassword">Password</label>
+      <input id="signupPassword" name="signupPassword" type="password" minlength="4" placeholder="Min 4 characters" required />
+
+      <button type="submit" class="btn-primary">Create Account</button>
+    </form>
+
+    <p id="authMessage" class="message" role="alert"></p>
+  </main>
+
+  <script src="script.js"></script>
 </body>
 </html>
